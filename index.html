@@ -52,7 +52,7 @@
             <h3 class="font-bold text-sm">Watermark Tool</h3>
             <div class="section-card">
                 <div class="bg-slate-50 border border-slate-100 rounded-lg p-4 mb-4 flex items-center justify-center relative flex-1 min-h-[150px]">
-                    <img id="logoPre" src="Assets/watermark.png" onerror="console.error('Preview image failed to load from Assets/watermark.png')" class="max-w-[120px] max-h-full object-contain">
+                    <img id="logoPre" src="./Assets/watermark.png" class="max-w-[120px] max-h-full object-contain">
                     <span class="absolute bottom-2 right-2 text-slate-400">🔍</span>
                 </div>
                 
@@ -131,12 +131,17 @@
     const opInput = document.getElementById('opInput'), scInput = document.getElementById('scInput');
     let sImg = new Image(), wImg = new Image(), logoX = 85, logoY = 85, isDragging = false;
 
-    // Load transparent watermark
-    wImg.src = "Assets/watermark.png";
+    // Use a relative path with a fallback mechanism
+    const wmPath = "./Assets/watermark.png";
+    wImg.src = wmPath;
     
-    // Safety check: Alert if the image fails to load
     wImg.onerror = function() {
-        alert("CRITICAL ERROR: Could not find 'Assets/watermark.png'. Please check your folder and ensure the file name is exact.");
+        console.warn("Attempting lowercase fallback for folder name...");
+        if (wImg.src.includes("Assets")) {
+            wImg.src = "./assets/watermark.png";
+        } else {
+            alert("FILE NOT FOUND: Please ensure 'watermark.png' is inside the 'Assets' folder.");
+        }
     };
 
     wImg.onload = () => render();
@@ -150,29 +155,22 @@
     };
 
     function updateLogoPosition(e) {
+        if (!pc.width) return;
         const rect = pc.getBoundingClientRect();
         logoX = ((e.clientX - rect.left) / rect.width) * 100;
         logoY = ((e.clientY - rect.top) / rect.height) * 100;
         render();
     }
 
-    pc.addEventListener('mousedown', (e) => { 
-        isDragging = true; 
-        updateLogoPosition(e); 
-    });
-    window.addEventListener('mousemove', (e) => { 
-        if(isDragging) updateLogoPosition(e); 
-    });
-    window.addEventListener('mouseup', () => { 
-        isDragging = false; 
-    });
+    pc.addEventListener('mousedown', (e) => { isDragging = true; updateLogoPosition(e); });
+    window.addEventListener('mousemove', (e) => { if(isDragging) updateLogoPosition(e); });
+    window.addEventListener('mouseup', () => { isDragging = false; });
 
     function setPos(p) {
         if(p==='tl'){logoX=10;logoY=10;} else if(p==='tc'){logoX=50;logoY=50;} else if(p==='tr'){logoX=90;logoY=10;}
         else if(p==='ml'){logoX=10;logoY=50;} else if(p==='mc'){logoX=50;logoY=10;} else if(p==='br'){logoX=90;logoY=90;}
-        
         document.querySelectorAll('.pos-item').forEach(i => i.classList.remove('active'));
-        if (event) event.currentTarget.classList.add('active');
+        if(event) event.currentTarget.classList.add('active');
         render();
     }
 
@@ -188,7 +186,6 @@
             const sz = w * (scInput.value / 100);
             ctx.save();
             ctx.globalAlpha = opInput.value / 100;
-            // Draw normally to support PNG transparency
             ctx.drawImage(wImg, (logoX / 100) * w - (sz/2), (logoY / 100) * h - (sz/2), sz, sz);
             ctx.restore();
         }
@@ -207,10 +204,8 @@
         formData.append('image', fileInput.files[0]);
         
         try {
-            const responseWm = await fetch('Assets/watermark.png');
-            if (!responseWm.ok) {
-                throw new Error("Could not load Assets/watermark.png during export.");
-            }
+            const responseWm = await fetch(wImg.src);
+            if (!responseWm.ok) throw new Error("Watermark file missing from server.");
             const wmBlob = await responseWm.blob();
             formData.append('watermark', wmBlob);
 
@@ -219,16 +214,7 @@
                 body: formData
             });
 
-            if (!response.ok) {
-                let serverError = "Unknown Server Error";
-                try {
-                    const errData = await response.json();
-                    serverError = errData.error || serverError;
-                } catch(e) {
-                    serverError = await response.text();
-                }
-                throw new Error("Python Server Error: " + serverError);
-            }
+            if (!response.ok) throw new Error("Server processing failed.");
 
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);

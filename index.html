@@ -71,9 +71,9 @@
                     <label class="text-xs font-bold block mb-2">Position (Drag & Drop)</label>
                     <div class="pos-grid">
                         <div onclick="setPos('tl')" class="pos-item">↖<br>Top-Left</div>
-                        <div onclick="setPos('tc')" class="pos-item">upload<br>Center</div>
+                        <div onclick="setPos('tc')" class="pos-item">↑<br>Center</div>
                         <div onclick="setPos('tr')" class="pos-item">↗<br>Top-Right</div>
-                        <div onclick="setPos('ml')" class="pos-item">↙<br>Left</div>
+                        <div onclick="setPos('ml')" class="pos-item">←<br>Left</div>
                         <div onclick="setPos('mc')" class="pos-item">⊹<br>Top</div>
                         <div onclick="setPos('br')" class="pos-item active" id="pos-br">↘<br>Bottom-Right</div>
                     </div>
@@ -113,7 +113,7 @@
                     <button onclick="render()" class="w-full py-3 btn-blue rounded-md font-bold text-sm flex items-center justify-center gap-2">
                         <span>👁️</span> PREVIEW
                     </button>
-                    <button onclick="exportFull()" class="w-full py-3 btn-green rounded-md font-bold text-sm flex items-center justify-center gap-2">
+                    <button onclick="exportFull(event)" class="w-full py-3 btn-green rounded-md font-bold text-sm flex items-center justify-center gap-2">
                         <span>📥</span> SAVE IMAGE
                     </button>
                     <p class="text-[10px] text-slate-400 text-center">Exports at original higher resolution</p>
@@ -188,51 +188,60 @@
         }
     }
 
-    async function exportFull() {
-    const fileInput = document.getElementById('fileIn');
-    if (!fileInput.files[0]) return alert("Select an image first.");
+    async function exportFull(event) {
+        const fileInput = document.getElementById('fileIn');
+        if (!fileInput.files[0]) return alert("Select an image first.");
 
-    // Update button to show it's working
-    const btn = event.currentTarget;
-    const originalText = btn.innerHTML;
-    btn.innerHTML = "⏳ ENCRYPTING...";
-    btn.disabled = true;
+        // Update button to show it's working
+        const btn = event.currentTarget;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = "⏳ ENCRYPTING...";
+        btn.disabled = true;
 
-    // Package the House Image and the Watermark Logo
-    const formData = new FormData();
-    formData.append('image', fileInput.files[0]);
-    
-    try {
-        // Fetch the watermark file from your folder
-        const responseWm = await fetch('Assets/watermark.jpg');
-        const wmBlob = await responseWm.blob();
-        formData.append('watermark', wmBlob);
+        const formData = new FormData();
+        formData.append('image', fileInput.files[0]);
+        
+        try {
+            // Fetch the watermark file from your folder with an error check
+            const responseWm = await fetch('Assets/watermark.jpg');
+            if (!responseWm.ok) {
+                throw new Error("Could not load Assets/watermark.jpg. Check the folder/file name.");
+            }
+            const wmBlob = await responseWm.blob();
+            formData.append('watermark', wmBlob);
 
-      
-// Ensure there is NO space before /process
-const response = await fetch('https://luminamark-backend.onrender.com/process', { 
-    method: 'POST',
-    body: formData
-});
+            const response = await fetch('https://luminamark-backend.onrender.com/process', { 
+                method: 'POST',
+                body: formData
+            });
 
+            // This will pull the exact error from Python if it crashes
+            if (!response.ok) {
+                let serverError = "Unknown Server Error";
+                try {
+                    const errData = await response.json();
+                    serverError = errData.error || serverError;
+                } catch(e) {
+                    serverError = await response.text();
+                }
+                throw new Error("Python Server Error: " + serverError);
+            }
 
-        if (!response.ok) throw new Error('Server connection failed. Is Python running?');
-
-        // Download the highly protected invisible file
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = "LuminaMark_Protected.png";
-        a.click();
-    } catch (err) {
-        alert("Error: " + err.message);
-    } finally {
-        // Reset button
-        btn.innerHTML = originalText;
-        btn.disabled = false;
+            // Download the highly protected invisible file
+            const blob = await response.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = "LuminaMark_Protected.png";
+            a.click();
+        } catch (err) {
+            alert(err.message);
+        } finally {
+            // Reset button
+            btn.innerHTML = originalText;
+            btn.disabled = false;
+        }
     }
-}
 </script>
 </body>
 </html>

@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LuminaMark | Landscape Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #e2e8f0; 
+            height: 100vh; 
+            margin: 0; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: #1e293b;
+        }
+
+        .app-window {
+            background: white;
+            width: 98%;
+            height: 90%;
+            max-width: 1600px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            border: 1px solid #cbd5e1;
+        }
+
+        .window-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .section-card {
+            background: #ffffff;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 1.25rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Updated to Landscape Ratio (16:9) */
+        .canvas-container {
+            background: #f8fafc;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+            aspect-ratio: 16 / 9; 
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+
+        .pos-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1px;
+            background: #e2e8f0;
+            border: 1px solid #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .pos-item {
+            background: #f8fafc;
+            padding: 0.6rem 0.2rem;
+            font-size: 10px;
+            font-weight: 600;
+            text-align: center;
+            cursor: pointer;
+            color: #64748b;
+        }
+
+        .pos-item:hover { background: #f1f5f9; }
+        .pos-item.active { background: #e2e8f0; color: #1e293b; }
+
+        .btn-blue { background: #336791; color: white; }
+        .btn-green { background: #3a8d5f; color: white; }
+        
+        input[type="range"] { accent-color: #336791; }
+        
+        .toggle-switch {
+            width: 36px; height: 20px;
+            background: #336791;
+            border-radius: 20px;
+            position: relative;
+        }
+        .toggle-circle {
+            width: 14px; height: 14px;
+            background: white;
+            border-radius: 50%;
+            position: absolute; right: 3px; top: 3px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-window">
+    <div class="window-header">
+        <div class="flex items-center gap-3">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span class="text-xl font-bold tracking-tight">LuminaMark</span>
+        </div>
+        <div class="flex gap-4 text-slate-400 font-medium text-lg">
+            <span>—</span><span>?</span><span>✕</span>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-6 p-6 flex-1 overflow-hidden">
+        
+        <div class="flex flex-col gap-4">
+            <h3 class="font-bold text-sm">Source Image</h3>
+            <div class="section-card gap-4">
+                <button onclick="document.getElementById('fileIn').click()" class="w-full py-2 px-4 border border-slate-300 rounded flex items-center justify-center gap-2 text-sm font-medium hover:bg-slate-50">
+                    <span>🖼️</span> Choose Image
+                </button>
+                <input type="file" id="fileIn" class="hidden" accept="image/*">
+                <div class="canvas-container">
+                    <canvas id="pCanvas" class="w-full h-full object-contain"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+            <h3 class="font-bold text-sm">Watermark Tool</h3>
+            <div class="section-card">
+                <div class="bg-slate-50 border border-slate-100 rounded-lg p-4 mb-4 flex items-center justify-center relative flex-1 min-h-[150px]">
+                    <img id="logoPre" src="Assets/watermark.jpg" class="max-w-[120px] max-h-full object-contain" alt="Watermark Preview">
+                    <span class="absolute bottom-2 right-2 text-slate-400">🔍</span>
+                </div>
+                
+                <div class="grid grid-cols-2 gap-4 mb-4">
+                    <div>
+                        <label class="text-xs font-bold block mb-1">Opacity</label>
+                        <input type="range" id="op" class="w-full" value="80">
+                    </div>
+                    <div>
+                        <label class="text-xs font-bold block mb-1">Scale</label>
+                        <input type="range" id="sc" class="w-full" value="20" min="5" max="60">
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <label class="text-xs font-bold block mb-2">Position (Drag & Drop)</label>
+                    <div class="pos-grid">
+                        <div onclick="setPos('tl')" class="pos-item">↖<br>Top-Left</div>
+                        <div onclick="setPos('tc')" class="pos-item">upload<br>Center</div>
+                        <div onclick="setPos('tr')" class="pos-item">↗<br>Top-Left</div>
+                        <div onclick="setPos('ml')" class="pos-item">↙<br>Left</div>
+                        <div onclick="setPos('mc')" class="pos-item">⊹<br>Top</div>
+                        <div onclick="setPos('br')" class="pos-item active">↘<br>Bottom-Right</div>
+                    </div>
+                </div>
+                <p class="text-[10px] text-slate-500">Watermark Selected:<br><b class="text-slate-900 uppercase">M S House Logo</b></p>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+            <h3 class="font-bold text-sm">Advanced Options & Export</h3>
+            <div class="section-card">
+                <div class="space-y-6">
+                    <div>
+                        <label class="text-xs font-bold block mb-2">Security Features</label>
+                        <div class="flex justify-between items-start">
+                            <div class="flex gap-2">
+                                <span class="text-xs">🔒</span>
+                                <p class="text-[11px] leading-tight">Enable Cryptographic<br>Signature (Tamper-Resistant)</p>
+                            </div>
+                            <div class="toggle-switch"><div class="toggle-circle"></div></div>
+                        </div>
+                    </div>
+
+                    <div class="border-t pt-4">
+                        <label class="text-xs font-bold block mb-2">Save Format</label>
+                        <select class="w-full p-2 border border-slate-300 rounded text-xs font-medium">
+                            <option>PNG, JPG, TIFF</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="text-xs font-bold block mb-2">Quality</label>
+                        <input type="range" class="w-full" value="90">
+                        <p class="text-[10px] text-slate-500 mt-1">Highest Quality (Lossless for PNG/TIFF, 100% for JPG)</p>
+                    </div>
+                </div>
+
+                <div class="mt-auto space-y-3">
+                    <button onclick="render()" class="w-full py-3 btn-blue rounded-md font-bold text-sm flex items-center justify-center gap-2">
+                        <span>👁️</span> PREVIEW
+                    </button>
+                    <button onclick="exportFull()" class="w-full py-3 btn-green rounded-md font-bold text-sm flex items-center justify-center gap-2">
+                        <span>📥</span> SAVE IMAGE
+                    </button>
+                    <p class="text-[10px] text-slate-400 text-center">Exports at original higher resolution</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<canvas id="eCanvas" class="hidden"></canvas>
+
+<script>
+    const pc = document.getElementById('pCanvas'), ec = document.getElementById('eCanvas');
+    const px = pc.getContext('2d'), ex = ec.getContext('2d');
+    let sImg = new Image(), wImg = new Image(), cPos = 'br';
+
+    // FIX: Handling the JPG path properly
+    wImg.src = "Assets/watermark.jpg";
+    wImg.onload = () => render();
+    wImg.onerror = () => {
+        console.error("Asset missing: Place your file in 'Assets/watermark.jpg'");
+        document.getElementById('logoPre').style.opacity = "0.3";
+    };
+
+    document.getElementById('fileIn').onchange = (e) => {
+        const reader = new FileReader();
+        reader.onload = (f) => {
+            sImg.onload = () => render();
+            sImg.src = f.target.result;
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    };
+
+    function setPos(p) {
+        cPos = p;
+        document.querySelectorAll('.pos-item').forEach(i => {
+            i.classList.toggle('active', i.getAttribute('onclick').includes(p));
+        });
+        render();
+    }
+
+    document.getElementById('op').oninput = render;
+    document.getElementById('sc').oninput = render;
+
+    function render(isExport = false) {
+        if (!sImg.src) return;
+        const target = isExport ? ec : pc;
+        const ctx = target.getContext('2d');
+        
+        // Define Landscape Ratios
+        const w = isExport ? sImg.width : 1600;
+        const h = isExport ? sImg.height : 900;
+        target.width = w; target.height = h;
+        
+        ctx.drawImage(sImg, 0, 0, w, h);
+        if(!wImg.complete || wImg.naturalWidth === 0) return;
+
+        const sz = w * (document.getElementById('sc').value / 100);
+        const pad = w * 0.03;
+        let x, y;
+
+        if(cPos.startsWith('t')) y = pad; 
+        else if(cPos.startsWith('m')) y = (h/2)-(sz/2); 
+        else y = h-sz-pad;
+
+        if(cPos.endsWith('l')) x = pad; 
+        else if(cPos.endsWith('c')) x = (w/2)-(sz/2); 
+        else x = w-sz-pad;
+
+        // Multiply mode automatically hides white backgrounds on JPG watermarks
+        ctx.globalCompositeOperation = "multiply";
+        ctx.globalAlpha = document.getElementById('op').value / 100;
+        ctx.drawImage(wImg, x, y, sz, sz);
+        ctx.globalCompositeOperation = "source-over";
+    }
+
+    function exportFull() {
+        if(!sImg.src) return alert("Select a source image first.");
+        render(true);
+        const link = document.createElement('a');
+        link.download = `LuminaMark_Landscape_${Date.now()}.png`;
+        link.href = ec.toDataURL();
+        link.click();
+    }
+</script>
+</body>
+</html>

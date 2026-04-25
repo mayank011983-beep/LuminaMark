@@ -52,7 +52,7 @@
             <h3 class="font-bold text-sm">Watermark Tool</h3>
             <div class="section-card">
                 <div class="bg-slate-50 border border-slate-100 rounded-lg p-4 mb-4 flex items-center justify-center relative flex-1 min-h-[150px]">
-                    <img id="logoPre" src="./Assets/watermark.png" class="max-w-[120px] max-h-full object-contain">
+                    <img id="logoPre" src="./assets/watermark.png" class="max-w-[120px] max-h-full object-contain">
                     <span class="absolute bottom-2 right-2 text-slate-400">🔍</span>
                 </div>
                 
@@ -68,22 +68,22 @@
                 </div>
 
                 <div class="mb-4">
-                    <label class="text-xs font-bold block mb-2">Position (Drag & Drop)</label>
+                    <label class="text-xs font-bold block mb-2">Position</label>
                     <div class="pos-grid">
-                        <div onclick="setPos('tl')" class="pos-item">↖<br>Top-Left</div>
-                        <div onclick="setPos('tc')" class="pos-item">↑<br>Center</div>
-                        <div onclick="setPos('tr')" class="pos-item">↗<br>Top-Right</div>
-                        <div onclick="setPos('ml')" class="pos-item">←<br>Left</div>
-                        <div onclick="setPos('mc')" class="pos-item">⊹<br>Top</div>
-                        <div onclick="setPos('br')" class="pos-item active" id="pos-br">↘<br>Bottom-Right</div>
+                        <div onclick="setPos('tl', event)" class="pos-item">↖<br>Top-Left</div>
+                        <div onclick="setPos('tc', event)" class="pos-item">↑<br>Center</div>
+                        <div onclick="setPos('tr', event)" class="pos-item">↗<br>Top-Right</div>
+                        <div onclick="setPos('ml', event)" class="pos-item">←<br>Left</div>
+                        <div onclick="setPos('mc', event)" class="pos-item">⊹<br>Top</div>
+                        <div onclick="setPos('br', event)" class="pos-item active" id="pos-br">↘<br>Bottom-Right</div>
                     </div>
                 </div>
-                <p class="text-[10px] text-slate-500">Watermark Selected:<br><b class="text-slate-900 uppercase">M S House Logo</b></p>
+                <p class="text-[10px] text-slate-500 uppercase font-bold text-center">Protected by MS House Engineering</p>
             </div>
         </div>
 
         <div class="flex flex-col gap-4">
-            <h3 class="font-bold text-sm">Advanced Options & Export</h3>
+            <h3 class="font-bold text-sm">Advanced Export</h3>
             <div class="section-card">
                 <div class="space-y-6 flex-1">
                     <div>
@@ -91,32 +91,26 @@
                         <div class="flex justify-between items-start">
                             <div class="flex gap-2">
                                 <span class="text-xs">🔒</span>
-                                <p class="text-[11px] leading-tight">Enable Cryptographic<br>Signature (Tamper-Resistant)</p>
+                                <p class="text-[11px] leading-tight">Enable Cryptographic<br>Signature (L2 Hidden)</p>
                             </div>
                             <div class="toggle-switch"><div class="toggle-circle"></div></div>
                         </div>
                     </div>
                     <div>
-                        <label class="text-xs font-bold block mb-2">Save Format</label>
-                        <select class="w-full p-2 border border-slate-300 rounded text-xs font-medium">
-                            <option>PNG, JPG, TIFF</option>
+                        <label class="text-xs font-bold block mb-2">Format</label>
+                        <select class="w-full p-2 border border-slate-300 rounded text-xs font-medium bg-white">
+                            <option>High Quality PNG</option>
                         </select>
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold block mb-2">Quality</label>
-                        <input type="range" class="w-full" value="90">
-                        <p class="text-[10px] text-slate-500 mt-1">Highest Quality (Lossless for PNG/TIFF, 100% for JPG)</p>
                     </div>
                 </div>
 
                 <div class="mt-auto space-y-3">
                     <button onclick="render()" class="w-full py-3 btn-blue rounded-md font-bold text-sm flex items-center justify-center gap-2">
-                        <span>👁️</span> PREVIEW
+                        <span>👁️</span> REFRESH PREVIEW
                     </button>
                     <button onclick="exportFull(event)" class="w-full py-3 btn-green rounded-md font-bold text-sm flex items-center justify-center gap-2">
-                        <span>📥</span> SAVE IMAGE
+                        <span>📥</span> SAVE PROTECTED IMAGE
                     </button>
-                    <p class="text-[10px] text-slate-400 text-center">Exports at original higher resolution</p>
                 </div>
             </div>
         </div>
@@ -129,20 +123,27 @@
     const pc = document.getElementById('pCanvas'), ec = document.getElementById('eCanvas');
     const px = pc.getContext('2d'), ex = ec.getContext('2d');
     const opInput = document.getElementById('opInput'), scInput = document.getElementById('scInput');
+    const logoPre = document.getElementById('logoPre');
     let sImg = new Image(), wImg = new Image(), logoX = 85, logoY = 85, isDragging = false;
 
-    // Use a relative path with a fallback mechanism
-    const wmPath = "./Assets/watermark.png";
-    wImg.src = wmPath;
-    
-    wImg.onerror = function() {
-        console.warn("Attempting lowercase fallback for folder name...");
-        if (wImg.src.includes("Assets")) {
-            wImg.src = "./assets/watermark.png";
-        } else {
-            alert("FILE NOT FOUND: Please ensure 'watermark.png' is inside the 'Assets' folder.");
-        }
-    };
+    // --- SMART LOGO LOADING ---
+    // This tries lowercase 'assets' first, then uppercase 'Assets' if it fails
+    function initLogo() {
+        wImg.crossOrigin = "anonymous";
+        wImg.src = "./assets/watermark.png";
+        
+        wImg.onerror = function() {
+            if (wImg.src.includes("assets")) {
+                console.log("Retrying with Uppercase Assets...");
+                wImg.src = "./Assets/watermark.png";
+                logoPre.src = "./Assets/watermark.png";
+            } else {
+                alert("STILL NOT FOUND: Please rename your folder to 'assets' (lowercase) and file to 'watermark.png'.");
+            }
+        };
+    }
+
+    initLogo();
 
     wImg.onload = () => render();
     opInput.oninput = () => render();
@@ -166,28 +167,27 @@
     window.addEventListener('mousemove', (e) => { if(isDragging) updateLogoPosition(e); });
     window.addEventListener('mouseup', () => { isDragging = false; });
 
-    function setPos(p) {
-        if(p==='tl'){logoX=10;logoY=10;} else if(p==='tc'){logoX=50;logoY=50;} else if(p==='tr'){logoX=90;logoY=10;}
-        else if(p==='ml'){logoX=10;logoY=50;} else if(p==='mc'){logoX=50;logoY=10;} else if(p==='br'){logoX=90;logoY=90;}
+    function setPos(p, event) {
+        if(p==='tl'){logoX=10;logoY=10;} else if(p==='tc'){logoX=50;logoY=10;} else if(p==='tr'){logoX=90;logoY=10;}
+        else if(p==='ml'){logoX=10;logoY=50;} else if(p==='mc'){logoX=50;logoY=50;} else if(p==='br'){logoX=90;logoY=90;}
         document.querySelectorAll('.pos-item').forEach(i => i.classList.remove('active'));
         if(event) event.currentTarget.classList.add('active');
         render();
     }
 
-    function render(isExport = false) {
+    function render() {
         if (!sImg.src) return;
-        const target = isExport ? ec : pc;
-        const ctx = target.getContext('2d');
-        const w = isExport ? sImg.width : 1600, h = isExport ? sImg.height : 900;
-        target.width = w; target.height = h;
-        ctx.drawImage(sImg, 0, 0, w, h);
+        const w = 1600, h = 900;
+        pc.width = w; pc.height = h;
+        px.clearRect(0, 0, w, h);
+        px.drawImage(sImg, 0, 0, w, h);
         
         if(wImg.complete && wImg.naturalWidth !== 0) {
             const sz = w * (scInput.value / 100);
-            ctx.save();
-            ctx.globalAlpha = opInput.value / 100;
-            ctx.drawImage(wImg, (logoX / 100) * w - (sz/2), (logoY / 100) * h - (sz/2), sz, sz);
-            ctx.restore();
+            px.save();
+            px.globalAlpha = opInput.value / 100;
+            px.drawImage(wImg, (logoX / 100) * w - (sz/2), (logoY / 100) * h - (sz/2), sz, sz);
+            px.restore();
         }
     }
 
@@ -197,7 +197,7 @@
 
         const btn = event.currentTarget;
         const originalText = btn.innerHTML;
-        btn.innerHTML = "⏳ ENCRYPTING...";
+        btn.innerHTML = "⏳ RUNNING L2 ENCRYPTION...";
         btn.disabled = true;
 
         const formData = new FormData();
@@ -205,7 +205,6 @@
         
         try {
             const responseWm = await fetch(wImg.src);
-            if (!responseWm.ok) throw new Error("Watermark file missing from server.");
             const wmBlob = await responseWm.blob();
             formData.append('watermark', wmBlob);
 
@@ -214,7 +213,7 @@
                 body: formData
             });
 
-            if (!response.ok) throw new Error("Server processing failed.");
+            if (!response.ok) throw new Error("Server Error - Please check your Render logs.");
 
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
@@ -223,7 +222,7 @@
             a.download = "LuminaMark_Protected.png";
             a.click();
         } catch (err) {
-            alert(err.message);
+            alert("Export Failed: " + err.message);
         } finally {
             btn.innerHTML = originalText;
             btn.disabled = false;

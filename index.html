@@ -52,7 +52,7 @@
             <h3 class="font-bold text-sm">Watermark Tool</h3>
             <div class="section-card">
                 <div class="bg-slate-50 border border-slate-100 rounded-lg p-4 mb-4 flex items-center justify-center relative flex-1 min-h-[150px]">
-                    <img id="logoPre" src="Assets/watermark.jpg" class="max-w-[120px] max-h-full object-contain">
+                    <img id="logoPre" src="Assets/watermark.png" class="max-w-[120px] max-h-full object-contain">
                     <span class="absolute bottom-2 right-2 text-slate-400">🔍</span>
                 </div>
                 
@@ -131,7 +131,8 @@
     const opInput = document.getElementById('opInput'), scInput = document.getElementById('scInput');
     let sImg = new Image(), wImg = new Image(), logoX = 85, logoY = 85, isDragging = false;
 
-    wImg.src = "Assets/watermark.jpg";
+    // Updated to .png
+    wImg.src = "Assets/watermark.png";
     wImg.onload = () => render();
     opInput.oninput = () => render();
     scInput.oninput = () => render();
@@ -142,7 +143,6 @@
         reader.readAsDataURL(e.target.files[0]);
     };
 
-    // --- MOUSE MOVE LOGIC ---
     function updateLogoPosition(e) {
         const rect = pc.getBoundingClientRect();
         logoX = ((e.clientX - rect.left) / rect.width) * 100;
@@ -182,7 +182,7 @@
             const sz = w * (scInput.value / 100);
             ctx.save();
             ctx.globalAlpha = opInput.value / 100;
-            ctx.globalCompositeOperation = "multiply";
+            // Use source-over for cleaner transparency rendering
             ctx.drawImage(wImg, (logoX / 100) * w - (sz/2), (logoY / 100) * h - (sz/2), sz, sz);
             ctx.restore();
         }
@@ -192,7 +192,6 @@
         const fileInput = document.getElementById('fileIn');
         if (!fileInput.files[0]) return alert("Select an image first.");
 
-        // Update button to show it's working
         const btn = event.currentTarget;
         const originalText = btn.innerHTML;
         btn.innerHTML = "⏳ ENCRYPTING...";
@@ -202,10 +201,10 @@
         formData.append('image', fileInput.files[0]);
         
         try {
-            // Fetch the watermark file from your folder with an error check
-            const responseWm = await fetch('Assets/watermark.jpg');
+            // Updated to fetch .png
+            const responseWm = await fetch('Assets/watermark.png');
             if (!responseWm.ok) {
-                throw new Error("Could not load Assets/watermark.jpg. Check the folder/file name.");
+                throw new Error("Could not load Assets/watermark.png. Please ensure the file exists in the Assets folder.");
             }
             const wmBlob = await responseWm.blob();
             formData.append('watermark', wmBlob);
@@ -215,7 +214,6 @@
                 body: formData
             });
 
-            // This will pull the exact error from Python if it crashes
             if (!response.ok) {
                 let serverError = "Unknown Server Error";
                 try {
@@ -227,7 +225,6 @@
                 throw new Error("Python Server Error: " + serverError);
             }
 
-            // Download the highly protected invisible file
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -237,7 +234,6 @@
         } catch (err) {
             alert(err.message);
         } finally {
-            // Reset button
             btn.innerHTML = originalText;
             btn.disabled = false;
         }

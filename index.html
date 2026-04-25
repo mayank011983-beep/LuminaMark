@@ -52,7 +52,7 @@
             <h3 class="font-bold text-sm">Watermark Tool</h3>
             <div class="section-card">
                 <div class="bg-slate-50 border border-slate-100 rounded-lg p-4 mb-4 flex items-center justify-center relative flex-1 min-h-[150px]">
-                    <img id="logoPre" src="Assets/watermark.png" class="max-w-[120px] max-h-full object-contain">
+                    <img id="logoPre" src="Assets/watermark.png" onerror="console.error('Preview image failed to load from Assets/watermark.png')" class="max-w-[120px] max-h-full object-contain">
                     <span class="absolute bottom-2 right-2 text-slate-400">🔍</span>
                 </div>
                 
@@ -131,8 +131,14 @@
     const opInput = document.getElementById('opInput'), scInput = document.getElementById('scInput');
     let sImg = new Image(), wImg = new Image(), logoX = 85, logoY = 85, isDragging = false;
 
-    // Updated to .png
+    // Load transparent watermark
     wImg.src = "Assets/watermark.png";
+    
+    // Safety check: Alert if the image fails to load
+    wImg.onerror = function() {
+        alert("CRITICAL ERROR: Could not find 'Assets/watermark.png'. Please check your folder and ensure the file name is exact.");
+    };
+
     wImg.onload = () => render();
     opInput.oninput = () => render();
     scInput.oninput = () => render();
@@ -166,7 +172,7 @@
         else if(p==='ml'){logoX=10;logoY=50;} else if(p==='mc'){logoX=50;logoY=10;} else if(p==='br'){logoX=90;logoY=90;}
         
         document.querySelectorAll('.pos-item').forEach(i => i.classList.remove('active'));
-        event.currentTarget.classList.add('active');
+        if (event) event.currentTarget.classList.add('active');
         render();
     }
 
@@ -182,7 +188,7 @@
             const sz = w * (scInput.value / 100);
             ctx.save();
             ctx.globalAlpha = opInput.value / 100;
-            // Use source-over for cleaner transparency rendering
+            // Draw normally to support PNG transparency
             ctx.drawImage(wImg, (logoX / 100) * w - (sz/2), (logoY / 100) * h - (sz/2), sz, sz);
             ctx.restore();
         }
@@ -201,10 +207,9 @@
         formData.append('image', fileInput.files[0]);
         
         try {
-            // Updated to fetch .png
             const responseWm = await fetch('Assets/watermark.png');
             if (!responseWm.ok) {
-                throw new Error("Could not load Assets/watermark.png. Please ensure the file exists in the Assets folder.");
+                throw new Error("Could not load Assets/watermark.png during export.");
             }
             const wmBlob = await responseWm.blob();
             formData.append('watermark', wmBlob);

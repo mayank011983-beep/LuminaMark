@@ -188,14 +188,49 @@
         }
     }
 
-    function exportFull() {
-        if(!sImg.src) return alert("Select an image first.");
-        render(true);
-        const link = document.createElement('a');
-        link.download = `LuminaMark_Export.png`;
-        link.href = ec.toDataURL();
-        link.click();
+    async function exportFull() {
+    const fileInput = document.getElementById('fileIn');
+    if (!fileInput.files[0]) return alert("Select an image first.");
+
+    // Update button to show it's working
+    const btn = event.currentTarget;
+    const originalText = btn.innerHTML;
+    btn.innerHTML = "⏳ ENCRYPTING...";
+    btn.disabled = true;
+
+    // Package the House Image and the Watermark Logo
+    const formData = new FormData();
+    formData.append('image', fileInput.files[0]);
+    
+    try {
+        // Fetch the watermark file from your folder
+        const responseWm = await fetch('Assets/watermark.jpg');
+        const wmBlob = await responseWm.blob();
+        formData.append('watermark', wmBlob);
+
+        // Send to your Python Server
+        const response = await fetch('http://127.0.0.1:5000/process', {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!response.ok) throw new Error('Server connection failed. Is Python running?');
+
+        // Download the highly protected invisible file
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = "LuminaMark_Protected.png";
+        a.click();
+    } catch (err) {
+        alert("Error: " + err.message);
+    } finally {
+        // Reset button
+        btn.innerHTML = originalText;
+        btn.disabled = false;
     }
+}
 </script>
 </body>
 </html>

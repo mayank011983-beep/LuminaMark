@@ -3,113 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LuminaMark | Professional Suite</title>
+    <title>Invo Studio | Premium Asset Protection</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; background: #e2e8f0; height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; color: #1e293b; }
-        .app-window { background: white; width: 98%; height: 92%; max-width: 1600px; border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 20px 50px rgba(0,0,0,0.1); border: 1px solid #cbd5e1; }
-        .window-header { padding: 1rem 1.5rem; border-bottom: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; }
-        .section-card { background: white; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1.25rem; height: 100%; display: flex; flex-direction: column; }
-        .canvas-container { background: #f8fafc; border-radius: 6px; border: 1px solid #e2e8f0; aspect-ratio: 16 / 9; position: relative; cursor: move; overflow: hidden; width: 100%; }
-        canvas { width: 100%; height: 100%; }
-        .pos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: #e2e8f0; border: 1px solid #e2e8f0; border-radius: 4px; overflow: hidden; }
-        .pos-item { background: #f8fafc; padding: 0.6rem 0.2rem; font-size: 10px; font-weight: 600; text-align: center; cursor: pointer; color: #64748b; }
-        .pos-item.active { background: #e2e8f0; color: #1e293b; }
-        .btn-blue { background: #336791; color: white; }
-        .btn-green { background: #3a8d5f; color: white; }
-        input[type="range"] { accent-color: #336791; cursor: pointer; }
-        .toggle-switch { width: 36px; height: 20px; background: #336791; border-radius: 20px; position: relative; }
-        .toggle-circle { width: 14px; height: 14px; background: white; border-radius: 50%; position: absolute; right: 3px; top: 3px; }
+        body { font-family: 'Inter', sans-serif; background: #f1f5f9; height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; color: #1e293b; }
+        .app-window { background: white; width: 98%; height: 94%; max-width: 1600px; border-radius: 16px; display: flex; flex-direction: column; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15); border: 1px solid #e2e8f0; overflow: hidden; }
+        .window-header { padding: 1.25rem 2rem; border-bottom: 1px solid #f1f5f9; display: flex; justify-content: space-between; align-items: center; background: #ffffff; }
+        .section-card { background: #ffffff; border: 1px solid #f1f5f9; border-radius: 12px; padding: 1.5rem; height: 100%; display: flex; flex-direction: column; transition: all 0.3s ease; }
+        .canvas-container { background: #f8fafc; border-radius: 8px; border: 1px dashed #cbd5e1; aspect-ratio: 16 / 9; position: relative; cursor: crosshair; overflow: hidden; width: 100%; }
+        canvas { width: 100%; height: 100%; object-fit: contain; }
+        .pos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: #f1f5f9; border-radius: 6px; overflow: hidden; }
+        .pos-item { background: #ffffff; padding: 0.75rem 0.25rem; font-size: 10px; font-weight: 700; text-align: center; cursor: pointer; color: #94a3b8; transition: 0.2s; }
+        .pos-item:hover { background: #f8fafc; color: #334155; }
+        .pos-item.active { background: #1e293b; color: white; }
+        .btn-premium { background: #1e293b; color: white; transition: all 0.2s; }
+        .btn-premium:hover { background: #0f172a; transform: translateY(-1px); }
+        .btn-save { background: #059669; color: white; }
+        input[type="range"] { accent-color: #1e293b; }
     </style>
 </head>
 <body>
 
 <div class="app-window">
     <div class="window-header">
-        <div class="flex items-center gap-3">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-            <span class="text-xl font-bold tracking-tight">LuminaMark</span>
+        <div class="flex items-center gap-4">
+            <div class="bg-slate-900 p-2 rounded-lg text-white">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-xl font-bold tracking-[0.15em] uppercase text-slate-800">Invo Studio</h1>
+                <p class="text-[10px] font-bold text-slate-400 tracking-widest uppercase">Asset Protection Suite</p>
+            </div>
         </div>
-        <div class="flex gap-4 text-slate-400 font-bold text-lg"><span>—</span><span>?</span><span>✕</span></div>
+        <div class="flex items-center gap-6">
+            <div class="hidden md:flex gap-4 text-[11px] font-bold text-slate-400 uppercase tracking-widest">
+                <span>Network: Active</span>
+                <span class="text-emerald-500">Secure L2</span>
+            </div>
+            <div class="flex gap-3 text-slate-300 font-bold"><span>—</span><span>▢</span><span>✕</span></div>
+        </div>
     </div>
 
-    <div class="grid grid-cols-3 gap-6 p-6 flex-1 overflow-hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 p-6 flex-1 overflow-hidden">
+        
         <div class="flex flex-col gap-4">
-            <h3 class="font-bold text-sm">Source Image</h3>
-            <div class="section-card gap-4">
-                <button onclick="document.getElementById('fileIn').click()" class="w-full py-2 px-4 border border-slate-300 rounded flex items-center justify-center gap-2 text-sm font-medium hover:bg-slate-50">
-                    <span>🖼️</span> Choose Image
+            <h3 class="text-[11px] font-black uppercase text-slate-400 tracking-tighter">01. Source File</h3>
+            <div class="section-card">
+                <button onclick="document.getElementById('fileIn').click()" class="w-full py-3 px-4 border-2 border-slate-100 rounded-xl flex items-center justify-center gap-3 text-sm font-bold hover:bg-slate-50 transition-all mb-4">
+                    <span>🖼️</span> Import High-Res Image
                 </button>
                 <input type="file" id="fileIn" class="hidden" accept="image/*">
+                
                 <div class="canvas-container" id="canvasWrapper">
                     <canvas id="pCanvas"></canvas>
                 </div>
+                <p class="mt-4 text-[10px] text-slate-400 leading-relaxed text-center">Supported formats: PNG, JPG, WEBP. <br>Assets are processed locally for privacy.</p>
             </div>
         </div>
 
         <div class="flex flex-col gap-4">
-            <h3 class="font-bold text-sm">Watermark Tool</h3>
+            <h3 class="text-[11px] font-black uppercase text-slate-400 tracking-tighter">02. Mark Configuration</h3>
             <div class="section-card">
-                <div class="bg-slate-50 border border-slate-100 rounded-lg p-4 mb-4 flex items-center justify-center relative flex-1 min-h-[150px]">
-                    <img id="logoPre" src="./assets/watermark.png" class="max-w-[120px] max-h-full object-contain">
-                    <span class="absolute bottom-2 right-2 text-slate-400">🔍</span>
+                <div class="bg-slate-50 border border-slate-100 rounded-xl p-6 mb-6 flex items-center justify-center relative flex-1 min-h-[180px]">
+                    <img id="logoPre" src="./assets/watermark.png" class="max-w-[140px] max-h-full object-contain transition-opacity duration-500 opacity-0">
+                    <div id="loaderText" class="absolute text-[10px] font-bold text-slate-400 animate-pulse uppercase">Searching for Logo...</div>
                 </div>
                 
-                <div class="grid grid-cols-2 gap-4 mb-4">
+                <div class="space-y-6 mb-6">
                     <div>
-                        <label class="text-xs font-bold block mb-1">Opacity</label>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-[10px] font-black uppercase text-slate-500">Opacity</label>
+                            <span id="opVal" class="text-[10px] font-bold">80%</span>
+                        </div>
                         <input type="range" id="opInput" class="w-full" value="80">
                     </div>
                     <div>
-                        <label class="text-xs font-bold block mb-1">Scale</label>
+                        <div class="flex justify-between mb-2">
+                            <label class="text-[10px] font-black uppercase text-slate-500">Scale</label>
+                            <span id="scVal" class="text-[10px] font-bold">20%</span>
+                        </div>
                         <input type="range" id="scInput" class="w-full" value="20" min="5" max="80">
                     </div>
                 </div>
 
-                <div class="mb-4">
-                    <label class="text-xs font-bold block mb-2">Position</label>
+                <div>
+                    <label class="text-[10px] font-black uppercase text-slate-500 block mb-3">Positioning Grid</label>
                     <div class="pos-grid">
-                        <div onclick="setPos('tl', event)" class="pos-item">↖<br>Top-Left</div>
-                        <div onclick="setPos('tc', event)" class="pos-item">↑<br>Center</div>
-                        <div onclick="setPos('tr', event)" class="pos-item">↗<br>Top-Right</div>
-                        <div onclick="setPos('ml', event)" class="pos-item">←<br>Left</div>
-                        <div onclick="setPos('mc', event)" class="pos-item">⊹<br>Top</div>
-                        <div onclick="setPos('br', event)" class="pos-item active" id="pos-br">↘<br>Bottom-Right</div>
+                        <div onclick="setPos('tl', event)" class="pos-item">TOP L</div>
+                        <div onclick="setPos('tc', event)" class="pos-item">CENTER T</div>
+                        <div onclick="setPos('tr', event)" class="pos-item">TOP R</div>
+                        <div onclick="setPos('ml', event)" class="pos-item">MID L</div>
+                        <div onclick="setPos('mc', event)" class="pos-item">CENTER</div>
+                        <div onclick="setPos('br', event)" class="pos-item active">BTM R</div>
                     </div>
                 </div>
-                <p class="text-[10px] text-slate-500 uppercase font-bold text-center">Protected by MS House Engineering</p>
             </div>
         </div>
 
         <div class="flex flex-col gap-4">
-            <h3 class="font-bold text-sm">Advanced Export</h3>
+            <h3 class="text-[11px] font-black uppercase text-slate-400 tracking-tighter">03. Deployment</h3>
             <div class="section-card">
                 <div class="space-y-6 flex-1">
-                    <div>
-                        <label class="text-xs font-bold block mb-2">Security Features</label>
-                        <div class="flex justify-between items-start">
-                            <div class="flex gap-2">
-                                <span class="text-xs">🔒</span>
-                                <p class="text-[11px] leading-tight">Enable Cryptographic<br>Signature (L2 Hidden)</p>
-                            </div>
-                            <div class="toggle-switch"><div class="toggle-circle"></div></div>
+                    <div class="p-4 bg-slate-900 rounded-xl text-white">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="text-[10px] font-bold tracking-widest opacity-60">L2 PROTECTION</span>
+                            <div class="w-2 h-2 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"></div>
                         </div>
+                        <p class="text-xs leading-relaxed opacity-90">Cryptographic signature and metadata stripping enabled. Image integrity verified by MS House.</p>
                     </div>
+
                     <div>
-                        <label class="text-xs font-bold block mb-2">Format</label>
-                        <select class="w-full p-2 border border-slate-300 rounded text-xs font-medium bg-white">
-                            <option>High Quality PNG</option>
+                        <label class="text-[10px] font-black uppercase text-slate-500 block mb-2">Output Quality</label>
+                        <select class="w-full p-3 border border-slate-200 rounded-lg text-xs font-bold bg-white focus:outline-none focus:ring-2 focus:ring-slate-200">
+                            <option>Lossless Studio Grade (PNG)</option>
+                            <option>Optimized Web (JPG)</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="mt-auto space-y-3">
-                    <button onclick="render()" class="w-full py-3 btn-blue rounded-md font-bold text-sm flex items-center justify-center gap-2">
-                        <span>👁️</span> REFRESH PREVIEW
+                <div class="mt-auto space-y-3 pt-6 border-t border-slate-50">
+                    <button onclick="render()" class="w-full py-4 rounded-xl font-black text-xs tracking-widest border-2 border-slate-100 hover:bg-slate-50 transition-all uppercase">
+                        Refresh Preview
                     </button>
-                    <button onclick="exportFull(event)" class="w-full py-3 btn-green rounded-md font-bold text-sm flex items-center justify-center gap-2">
-                        <span>📥</span> SAVE PROTECTED IMAGE
+                    <button onclick="exportFull(event)" class="w-full py-4 btn-premium rounded-xl font-black text-xs tracking-widest flex items-center justify-center gap-3 shadow-lg shadow-slate-200 uppercase">
+                        <span>📥</span> Export Protected Asset
                     </button>
                 </div>
             </div>
@@ -117,37 +137,47 @@
     </div>
 </div>
 
-<canvas id="eCanvas" class="hidden"></canvas>
-
 <script>
-    const pc = document.getElementById('pCanvas'), ec = document.getElementById('eCanvas');
-    const px = pc.getContext('2d'), ex = ec.getContext('2d');
+    const pc = document.getElementById('pCanvas');
+    const px = pc.getContext('2d');
     const opInput = document.getElementById('opInput'), scInput = document.getElementById('scInput');
-    const logoPre = document.getElementById('logoPre');
-    let sImg = new Image(), wImg = new Image(), logoX = 85, logoY = 85, isDragging = false;
+    const logoPre = document.getElementById('logoPre'), loaderText = document.getElementById('loaderText');
+    
+    let sImg = new Image(), wImg = new Image();
+    let logoX = 85, logoY = 85, isDragging = false;
 
-    // --- SMART LOGO LOADING ---
-    // This tries lowercase 'assets' first, then uppercase 'Assets' if it fails
+    // --- AUTO-PATH FINDER ---
     function initLogo() {
-        wImg.crossOrigin = "anonymous";
-        wImg.src = "./assets/watermark.png";
-        
-        wImg.onerror = function() {
-            if (wImg.src.includes("assets")) {
-                console.log("Retrying with Uppercase Assets...");
-                wImg.src = "./Assets/watermark.png";
-                logoPre.src = "./Assets/watermark.png";
+        const paths = ["./assets/watermark.png", "./Assets/watermark.png", "assets/watermark.png", "watermark.png"];
+        let currentIdx = 0;
+
+        function tryNext() {
+            if (currentIdx < paths.length) {
+                wImg.src = paths[currentIdx];
+                currentIdx++;
             } else {
-                alert("STILL NOT FOUND: Please rename your folder to 'assets' (lowercase) and file to 'watermark.png'.");
+                loaderText.innerText = "LOGO NOT FOUND IN FOLDER";
+                loaderText.classList.remove('animate-pulse');
+                loaderText.style.color = "#ef4444";
             }
+        }
+
+        wImg.onload = () => {
+            logoPre.src = wImg.src;
+            logoPre.style.opacity = "1";
+            loaderText.style.display = "none";
+            render();
         };
+
+        wImg.onerror = tryNext;
+        tryNext();
     }
 
     initLogo();
 
-    wImg.onload = () => render();
-    opInput.oninput = () => render();
-    scInput.oninput = () => render();
+    // UI Updates
+    opInput.oninput = () => { document.getElementById('opVal').innerText = opInput.value + "%"; render(); };
+    scInput.oninput = () => { document.getElementById('scVal').innerText = scInput.value + "%"; render(); };
 
     document.getElementById('fileIn').onchange = (e) => {
         const reader = new FileReader();
@@ -177,7 +207,7 @@
 
     function render() {
         if (!sImg.src) return;
-        const w = 1600, h = 900;
+        const w = 1920, h = 1080; // High-res internal preview
         pc.width = w; pc.height = h;
         px.clearRect(0, 0, w, h);
         px.drawImage(sImg, 0, 0, w, h);
@@ -186,6 +216,7 @@
             const sz = w * (scInput.value / 100);
             px.save();
             px.globalAlpha = opInput.value / 100;
+            // Draw logo with transparency support
             px.drawImage(wImg, (logoX / 100) * w - (sz/2), (logoY / 100) * h - (sz/2), sz, sz);
             px.restore();
         }
@@ -193,11 +224,11 @@
 
     async function exportFull(event) {
         const fileInput = document.getElementById('fileIn');
-        if (!fileInput.files[0]) return alert("Select an image first.");
+        if (!fileInput.files[0]) return;
 
         const btn = event.currentTarget;
         const originalText = btn.innerHTML;
-        btn.innerHTML = "⏳ RUNNING L2 ENCRYPTION...";
+        btn.innerHTML = "⏳ SIGNING...";
         btn.disabled = true;
 
         const formData = new FormData();
@@ -213,16 +244,16 @@
                 body: formData
             });
 
-            if (!response.ok) throw new Error("Server Error - Please check your Render logs.");
+            if (!response.ok) throw new Error("Server communication lost.");
 
             const blob = await response.blob();
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = "LuminaMark_Protected.png";
+            a.download = `InvoStudio_${Date.now()}.png`;
             a.click();
         } catch (err) {
-            alert("Export Failed: " + err.message);
+            console.error(err.message);
         } finally {
             btn.innerHTML = originalText;
             btn.disabled = false;

@@ -7,89 +7,90 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background: #f4f7fa; height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; color: #1a202c; overflow: hidden; }
-        .app-window { background: white; width: 98%; height: 94%; max-width: 1700px; border-radius: 20px; display: flex; flex-direction: column; box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.2); border: 1px solid #e2e8f0; overflow: hidden; }
-        .window-header { padding: 1.25rem 2.5rem; border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center; background: #ffffff; }
-        .section-card { background: #ffffff; border: 1px solid #edf2f7; border-radius: 16px; padding: 2rem; height: 100%; display: flex; flex-direction: column; }
-        .canvas-container { background: #f8fafc; border-radius: 12px; border: 2px dashed #cbd5e1; aspect-ratio: 16 / 9; position: relative; cursor: none; overflow: hidden; width: 100%; transition: border-color 0.3s; }
-        .canvas-container:hover { border-color: #1a202c; }
+        body { font-family: 'Inter', sans-serif; background: #f4f7fa; height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; color: #1a202c; }
+        .app-window { background: white; width: 98%; height: 95%; max-width: 1600px; border-radius: 16px; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
+        .window-header { padding: 1.25rem 2rem; border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center; }
+        .canvas-container { background: #f8fafc; border-radius: 12px; border: 2px dashed #cbd5e1; aspect-ratio: 16 / 9; position: relative; cursor: crosshair; overflow: hidden; width: 100%; height: 100%; }
         canvas { width: 100%; height: 100%; object-fit: contain; }
-        .btn-premium { background: #1a202c; color: white; transition: all 0.2s ease; border-radius: 12px; }
-        .btn-premium:hover { background: #000000; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
         input[type="range"] { accent-color: #1a202c; cursor: pointer; }
+        .btn-download { background: #059669; color: white; transition: all 0.2s ease; border-radius: 12px; }
+        .btn-download:hover { background: #047857; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.3); }
     </style>
 </head>
 <body>
 
 <div class="app-window">
     <div class="window-header">
-        <div class="flex items-center gap-5">
-            <div class="bg-slate-900 p-3 rounded-xl text-white shadow-inner">
+        <div class="flex items-center gap-4">
+            <div class="bg-slate-900 p-2.5 rounded-xl text-white shadow-inner">
                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
                     <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
                 </svg>
             </div>
             <div>
-                <h1 class="text-2xl font-black tracking-[0.2em] uppercase text-slate-900">Invo Studio</h1>
-                <p class="text-[11px] font-bold text-slate-400 tracking-widest uppercase mt-0.5">Asset Protection Suite</p>
+                <h1 class="text-2xl font-black tracking-widest uppercase text-slate-900">Invo Studio</h1>
             </div>
         </div>
-        <div class="flex gap-4 text-slate-300 font-bold text-xl"><span>—</span><span>▢</span><span>✕</span></div>
+        <div class="text-[11px] font-extrabold text-emerald-600 uppercase tracking-widest bg-emerald-50 px-4 py-2 rounded-full border border-emerald-100">
+            System Online
+        </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 p-8 flex-1 overflow-hidden">
+    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 p-6 flex-1 overflow-hidden">
         
-        <div class="flex flex-col gap-5 lg:col-span-2">
-            <h3 class="text-[12px] font-black uppercase text-slate-400 tracking-wider">01. Import & Position</h3>
-            <div class="section-card">
-                <button onclick="document.getElementById('fileIn').click()" class="w-full py-4 px-6 border-2 border-slate-200 rounded-xl flex items-center justify-center gap-4 text-sm font-extrabold hover:bg-slate-50 transition-all mb-4 group">
-                    <span class="group-hover:scale-110 transition-transform">🖼️</span> Choose Base Image
-                </button>
-                <input type="file" id="fileIn" class="hidden" accept="image/*">
-                
-                <div class="canvas-container" id="canvasWrapper">
-                    <canvas id="pCanvas"></canvas>
-                </div>
-                <p class="mt-4 text-center text-[11px] text-slate-400 font-bold uppercase tracking-widest">Move your mouse over the image to position the watermark</p>
+        <div class="lg:col-span-3 flex flex-col gap-2 h-full">
+            <h3 class="text-xs font-black uppercase text-slate-400 tracking-wider">Preview Area</h3>
+            <div class="canvas-container" id="canvasWrapper">
+                <canvas id="pCanvas"></canvas>
             </div>
         </div>
 
-        <div class="flex flex-col gap-5">
-            <h3 class="text-[12px] font-black uppercase text-slate-400 tracking-wider">02. Configuration & Export</h3>
-            <div class="section-card">
+        <div class="flex flex-col gap-6 h-full bg-slate-50 border border-slate-100 rounded-2xl p-6">
+            
+            <div>
+                <h3 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Step 1: Upload</h3>
+                <button onclick="document.getElementById('fileIn').click()" class="w-full py-4 bg-white border-2 border-slate-200 rounded-xl font-extrabold hover:bg-slate-100 transition-all text-slate-800">
+                    🖼️ CHOOSE IMAGE
+                </button>
+                <input type="file" id="fileIn" class="hidden" accept="image/*">
+            </div>
+
+            <hr class="border-slate-200">
+
+            <div>
+                <h3 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-4">Step 2: Adjust Logo</h3>
                 
-                <div class="space-y-8 mb-8">
-                    <div>
-                        <div class="flex justify-between mb-3">
-                            <label class="text-[11px] font-black uppercase text-slate-500 tracking-widest">Opacity</label>
-                            <span id="opVal" class="text-[11px] font-bold text-slate-800">80%</span>
-                        </div>
-                        <input type="range" id="opInput" class="w-full h-2 bg-slate-200 rounded-lg appearance-none" value="80">
+                <div class="mb-6">
+                    <div class="flex justify-between mb-2">
+                        <label class="text-[11px] font-black uppercase text-slate-500 tracking-widest">Opacity</label>
+                        <span id="opVal" class="text-[11px] font-bold text-slate-800">80%</span>
                     </div>
-                    <div>
-                        <div class="flex justify-between mb-3">
-                            <label class="text-[11px] font-black uppercase text-slate-500 tracking-widest">Scale</label>
-                            <span id="scVal" class="text-[11px] font-bold text-slate-800">20%</span>
-                        </div>
-                        <input type="range" id="scInput" class="w-full h-2 bg-slate-200 rounded-lg appearance-none" value="20" min="5" max="80">
+                    <input type="range" id="opInput" class="w-full h-2 bg-slate-200 rounded-lg appearance-none" value="80">
+                </div>
+                
+                <div>
+                    <div class="flex justify-between mb-2">
+                        <label class="text-[11px] font-black uppercase text-slate-500 tracking-widest">Size</label>
+                        <span id="scVal" class="text-[11px] font-bold text-slate-800">20%</span>
                     </div>
-                </div>
-
-                <div class="p-5 bg-slate-50 rounded-xl border border-slate-200 mb-8">
-                    <h4 class="text-[10px] font-black text-slate-900 uppercase tracking-widest mb-2">Active Protocols:</h4>
-                    <ul class="text-[11px] text-slate-500 font-medium space-y-2">
-                        <li>✔️ White Background Removal</li>
-                        <li>✔️ Cursor-Tracking Position</li>
-                        <li>✔️ Secure L2 Encryption</li>
-                    </ul>
-                </div>
-
-                <div class="mt-auto">
-                    <button onclick="exportFull(event)" class="w-full py-4 btn-premium rounded-xl font-black text-xs tracking-widest flex items-center justify-center gap-3 uppercase">
-                        <span>📥</span> Export Protected Asset
-                    </button>
+                    <input type="range" id="scInput" class="w-full h-2 bg-slate-200 rounded-lg appearance-none" value="20" min="5" max="80">
                 </div>
             </div>
+
+            <div class="p-4 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
+                <span class="text-[10px] font-bold uppercase text-slate-500">Watermark Status:</span>
+                <span id="logoStatus" class="text-[10px] font-extrabold text-amber-500 uppercase">Loading...</span>
+            </div>
+
+            <hr class="border-slate-200 mt-auto">
+
+            <div>
+                <h3 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Step 3: Save</h3>
+                <button onclick="exportFull(event)" class="w-full py-5 btn-download font-black text-sm tracking-widest flex items-center justify-center gap-2 uppercase shadow-lg">
+                    <span>📥</span> DOWNLOAD
+                </button>
+            </div>
+
         </div>
     </div>
 </div>
@@ -98,21 +99,21 @@
     const pc = document.getElementById('pCanvas');
     const px = pc.getContext('2d');
     const opInput = document.getElementById('opInput'), scInput = document.getElementById('scInput');
+    const logoStatus = document.getElementById('logoStatus');
     
-    let sImg = new Image(); // The background image
-    let rawWImg = new Image(); // The original watermark
-    let cleanWImg = new Image(); // The transparent watermark
+    let sImg = new Image(); // Base Image
+    let rawWImg = new Image(); // Original Watermark
+    let cleanWImg = new Image(); // Transparent Watermark
     
-    let logoX = 50, logoY = 50; 
-    let isMouseOver = false;
+    let logoX = 50, logoY = 50; // Starts in the dead center
 
-    // --- AUTO PATH & WHITE REMOVAL ---
+    // --- AUTO PATH & REMOVE WHITE BACKGROUND ---
     function initLogo() {
         const paths = ["./assets/watermark.png", "./Assets/watermark.png", "assets/watermark.png", "watermark.png"];
         let currentIdx = 0;
 
         rawWImg.onload = () => {
-            // MAGIC: This makes the white background transparent automatically
+            // Remove white background logic
             const tCanvas = document.createElement('canvas');
             tCanvas.width = rawWImg.width; 
             tCanvas.height = rawWImg.height;
@@ -121,13 +122,18 @@
             
             const imgData = tCtx.getImageData(0, 0, tCanvas.width, tCanvas.height);
             for(let i = 0; i < imgData.data.length; i += 4) {
-                // If the pixel is white (or very light gray), make it completely transparent
+                // If pixel is white/light gray, erase it
                 if(imgData.data[i] > 200 && imgData.data[i+1] > 200 && imgData.data[i+2] > 200) {
                     imgData.data[i+3] = 0; 
                 }
             }
             tCtx.putImageData(imgData, 0, 0);
-            cleanWImg.onload = () => render();
+            
+            cleanWImg.onload = () => {
+                logoStatus.innerText = "Active & Transparent";
+                logoStatus.className = "text-[10px] font-extrabold text-emerald-500 uppercase";
+                render();
+            };
             cleanWImg.src = tCanvas.toDataURL();
         };
 
@@ -136,99 +142,84 @@
                 rawWImg.src = paths[currentIdx];
                 currentIdx++;
             } else {
-                console.error("Watermark not found.");
+                logoStatus.innerText = "NOT FOUND";
+                logoStatus.className = "text-[10px] font-extrabold text-red-500 uppercase";
             }
         }
         rawWImg.onerror = tryNext;
         tryNext();
     }
 
+    // Load logo immediately
     initLogo();
 
-    // UI Updates
+    // UI Sliders
     opInput.oninput = () => { document.getElementById('opVal').innerText = opInput.value + "%"; render(); };
     scInput.oninput = () => { document.getElementById('scVal').innerText = scInput.value + "%"; render(); };
 
     // File Upload
     document.getElementById('fileIn').onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
         const reader = new FileReader();
         reader.onload = (f) => { 
             sImg.onload = () => render(); 
             sImg.src = f.target.result; 
         };
-        reader.readAsDataURL(e.target.files[0]);
+        reader.readAsDataURL(file);
     };
 
     // --- MOUSE TRACKING ---
-    pc.addEventListener('mouseenter', () => { isMouseOver = true; });
-    pc.addEventListener('mouseleave', () => { isMouseOver = false; render(); });
     pc.addEventListener('mousemove', (e) => {
         if (!sImg.src) return;
-        isMouseOver = true;
         const rect = pc.getBoundingClientRect();
-        // Convert mouse position to percentages
+        // Update percentages based on cursor position
         logoX = ((e.clientX - rect.left) / rect.width) * 100;
         logoY = ((e.clientY - rect.top) / rect.height) * 100;
         render();
     });
 
-    // Drawing the canvas
+    // Draw everything to the screen
     function render() {
         if (!sImg.src) return;
-        const w = 1920, h = 1080; // High-res internal preview
+        const w = 1920, h = 1080; // Standardize internal canvas resolution
         pc.width = w; pc.height = h;
         px.clearRect(0, 0, w, h);
+        
+        // 1. Draw Photo
         px.drawImage(sImg, 0, 0, w, h);
         
-        // Only draw the watermark if the mouse is hovering over the canvas
-        if(cleanWImg.complete && cleanWImg.naturalWidth !== 0 && isMouseOver) {
+        // 2. Draw Transparent Watermark over photo
+        if(cleanWImg.complete && cleanWImg.naturalWidth !== 0) {
             const sz = w * (scInput.value / 100);
             px.save();
             px.globalAlpha = opInput.value / 100;
+            // Draw exactly where the mouse is
             px.drawImage(cleanWImg, (logoX / 100) * w - (sz/2), (logoY / 100) * h - (sz/2), sz, sz);
             px.restore();
         }
     }
 
-    // Export Functionality
+    // --- EXPORT FUNCTION ---
     async function exportFull(event) {
-        const fileInput = document.getElementById('fileIn');
-        if (!fileInput.files[0]) return;
+        if (!sImg.src) return alert("Please upload an image first!");
 
         const btn = event.currentTarget;
         const originalText = btn.innerHTML;
-        btn.innerHTML = "⏳ ENCRYPTING...";
+        btn.innerHTML = "⏳ SAVING...";
         btn.disabled = true;
 
-        const formData = new FormData();
-        formData.append('image', fileInput.files[0]);
-        
         try {
-            const responseWm = await fetch(cleanWImg.src);
-            const wmBlob = await responseWm.blob();
-            formData.append('watermark', wmBlob);
-
-            const response = await fetch('https://luminamark-backend.onrender.com/process', { 
-                method: 'POST',
-                body: formData
-            });
-
-            if (!response.ok) throw new Error("Server communication lost.");
-
-            const blob = await response.blob();
-            const url = window.URL.createObjectURL(blob);
+            // To ensure you get the exact image you see, we download it directly from the browser canvas
+            const finalImageURL = pc.toDataURL("image/png");
             const a = document.createElement('a');
-            a.href = url;
+            a.href = finalImageURL;
             a.download = `InvoStudio_${Date.now()}.png`;
+            document.body.appendChild(a);
             a.click();
+            document.body.removeChild(a);
         } catch (err) {
-            console.error(err.message);
-            // Fallback: If Render server fails, download directly from browser
-            const fallbackUrl = pc.toDataURL("image/png");
-            const a = document.createElement('a');
-            a.href = fallbackUrl;
-            a.download = `InvoStudio_Local_${Date.now()}.png`;
-            a.click();
+            alert("Download failed.");
         } finally {
             btn.innerHTML = originalText;
             btn.disabled = false;

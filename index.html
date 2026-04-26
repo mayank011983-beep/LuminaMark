@@ -10,11 +10,11 @@
         body { font-family: 'Inter', sans-serif; background: #f4f7fa; height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; color: #1a202c; }
         .app-window { background: white; width: 98%; height: 95%; max-width: 1600px; border-radius: 16px; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
         .window-header { padding: 1.25rem 2rem; border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center; }
-        .canvas-container { background: #f8fafc; border-radius: 12px; border: 2px dashed #cbd5e1; aspect-ratio: 16 / 9; position: relative; cursor: crosshair; overflow: hidden; width: 100%; height: 100%; }
+        .canvas-container { background: #f8fafc; border-radius: 12px; border: 2px dashed #cbd5e1; aspect-ratio: 16 / 9; position: relative; cursor: cell; overflow: hidden; width: 100%; height: 100%; }
         canvas { width: 100%; height: 100%; object-fit: contain; }
+        .btn-download { background: #059669; color: white; transition: all 0.2s ease; border-radius: 12px; font-weight: 900; }
+        .btn-download:hover { background: #047857; transform: translateY(-2px); }
         input[type="range"] { accent-color: #1a202c; cursor: pointer; }
-        .btn-download { background: #059669; color: white; transition: all 0.2s ease; border-radius: 12px; }
-        .btn-download:hover { background: #047857; transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(5, 150, 105, 0.3); }
     </style>
 </head>
 <body>
@@ -23,74 +23,48 @@
     <div class="window-header">
         <div class="flex items-center gap-4">
             <div class="bg-slate-900 p-2.5 rounded-xl text-white shadow-inner">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
-                </svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
             </div>
-            <div>
-                <h1 class="text-2xl font-black tracking-widest uppercase text-slate-900">Invo Studio</h1>
-            </div>
+            <h1 class="text-2xl font-black tracking-widest uppercase text-slate-900">Invo Studio</h1>
         </div>
-        <div class="text-[11px] font-extrabold text-emerald-600 uppercase tracking-widest bg-emerald-50 px-4 py-2 rounded-full border border-emerald-100">
-            System Online
-        </div>
+        <div class="text-[11px] font-extrabold text-emerald-600 tracking-widest bg-emerald-50 px-4 py-2 rounded-full border border-emerald-100">System Ready</div>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 p-6 flex-1 overflow-hidden">
-        
         <div class="lg:col-span-3 flex flex-col gap-2 h-full">
-            <h3 class="text-xs font-black uppercase text-slate-400 tracking-wider">Preview Area</h3>
+            <div class="flex justify-between items-end">
+                <h3 class="text-xs font-black uppercase text-slate-400">01. Preview & Placement</h3>
+                <span id="moveHint" class="text-[10px] font-bold text-amber-600 uppercase bg-amber-50 px-2 py-1 rounded">Click image to Pick Up / Drop logo</span>
+            </div>
             <div class="canvas-container" id="canvasWrapper">
                 <canvas id="pCanvas"></canvas>
             </div>
         </div>
 
         <div class="flex flex-col gap-6 h-full bg-slate-50 border border-slate-100 rounded-2xl p-6">
-            
             <div>
-                <h3 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Step 1: Upload</h3>
-                <button onclick="document.getElementById('fileIn').click()" class="w-full py-4 bg-white border-2 border-slate-200 rounded-xl font-extrabold hover:bg-slate-100 transition-all text-slate-800">
-                    🖼️ CHOOSE IMAGE
-                </button>
+                <button onclick="document.getElementById('fileIn').click()" class="w-full py-4 bg-white border-2 border-slate-200 rounded-xl font-black text-slate-800 hover:bg-slate-100 transition-all">🖼️ CHOOSE IMAGE</button>
                 <input type="file" id="fileIn" class="hidden" accept="image/*">
             </div>
 
-            <hr class="border-slate-200">
-
-            <div>
-                <h3 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-4">Step 2: Adjust Logo</h3>
-                
-                <div class="mb-6">
-                    <div class="flex justify-between mb-2">
-                        <label class="text-[11px] font-black uppercase text-slate-500 tracking-widest">Opacity</label>
-                        <span id="opVal" class="text-[11px] font-bold text-slate-800">80%</span>
-                    </div>
+            <div class="space-y-6">
+                <div>
+                    <div class="flex justify-between mb-2"><label class="text-[11px] font-black text-slate-500 uppercase">Opacity</label><span id="opVal" class="text-[11px] font-bold">80%</span></div>
                     <input type="range" id="opInput" class="w-full h-2 bg-slate-200 rounded-lg appearance-none" value="80">
                 </div>
-                
                 <div>
-                    <div class="flex justify-between mb-2">
-                        <label class="text-[11px] font-black uppercase text-slate-500 tracking-widest">Size</label>
-                        <span id="scVal" class="text-[11px] font-bold text-slate-800">20%</span>
-                    </div>
+                    <div class="flex justify-between mb-2"><label class="text-[11px] font-black text-slate-500 uppercase">Size</label><span id="scVal" class="text-[11px] font-bold">20%</span></div>
                     <input type="range" id="scInput" class="w-full h-2 bg-slate-200 rounded-lg appearance-none" value="20" min="5" max="80">
                 </div>
             </div>
 
-            <div class="p-4 bg-white rounded-xl border border-slate-200 flex items-center justify-between">
-                <span class="text-[10px] font-bold uppercase text-slate-500">Watermark Status:</span>
-                <span id="logoStatus" class="text-[10px] font-extrabold text-amber-500 uppercase">Loading...</span>
+            <div class="p-4 bg-white rounded-xl border border-slate-200 text-center">
+                <span id="logoStatus" class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Logo Not Found</span>
             </div>
 
-            <hr class="border-slate-200 mt-auto">
-
-            <div>
-                <h3 class="text-xs font-black uppercase text-slate-400 tracking-wider mb-2">Step 3: Save</h3>
-                <button onclick="exportFull(event)" class="w-full py-5 btn-download font-black text-sm tracking-widest flex items-center justify-center gap-2 uppercase shadow-lg">
-                    <span>📥</span> DOWNLOAD
-                </button>
+            <div class="mt-auto">
+                <button onclick="exportFull(event)" class="w-full py-5 btn-download text-sm tracking-widest uppercase shadow-lg">📥 DOWNLOAD IMAGE</button>
             </div>
-
         </div>
     </div>
 </div>
@@ -100,130 +74,93 @@
     const px = pc.getContext('2d');
     const opInput = document.getElementById('opInput'), scInput = document.getElementById('scInput');
     const logoStatus = document.getElementById('logoStatus');
-    
-    let sImg = new Image(); // Base Image
-    let rawWImg = new Image(); // Original Watermark
-    let cleanWImg = new Image(); // Transparent Watermark
-    
-    let logoX = 50, logoY = 50; // Starts in the dead center
+    const moveHint = document.getElementById('moveHint');
 
-    // --- AUTO PATH & REMOVE WHITE BACKGROUND ---
+    let sImg = new Image(); 
+    let rawWImg = new Image(); 
+    let cleanWImg = new Image(); 
+    
+    let logoX = 50, logoY = 50; 
+    let isFollowing = false; // The "Pickup" state
+
     function initLogo() {
         const paths = ["./assets/watermark.png", "./Assets/watermark.png", "assets/watermark.png", "watermark.png"];
         let currentIdx = 0;
-
         rawWImg.onload = () => {
-            // Remove white background logic
             const tCanvas = document.createElement('canvas');
-            tCanvas.width = rawWImg.width; 
-            tCanvas.height = rawWImg.height;
+            tCanvas.width = rawWImg.width; tCanvas.height = rawWImg.height;
             const tCtx = tCanvas.getContext('2d');
             tCtx.drawImage(rawWImg, 0, 0);
-            
             const imgData = tCtx.getImageData(0, 0, tCanvas.width, tCanvas.height);
             for(let i = 0; i < imgData.data.length; i += 4) {
-                // If pixel is white/light gray, erase it
-                if(imgData.data[i] > 200 && imgData.data[i+1] > 200 && imgData.data[i+2] > 200) {
-                    imgData.data[i+3] = 0; 
-                }
+                if(imgData.data[i] > 210 && imgData.data[i+1] > 210 && imgData.data[i+2] > 210) imgData.data[i+3] = 0; 
             }
             tCtx.putImageData(imgData, 0, 0);
-            
-            cleanWImg.onload = () => {
-                logoStatus.innerText = "Active & Transparent";
-                logoStatus.className = "text-[10px] font-extrabold text-emerald-500 uppercase";
-                render();
-            };
+            cleanWImg.onload = () => { logoStatus.innerText = "Protocol: Transparent"; logoStatus.className = "text-[10px] font-black text-emerald-500 uppercase"; render(); };
             cleanWImg.src = tCanvas.toDataURL();
         };
-
-        function tryNext() {
-            if (currentIdx < paths.length) {
-                rawWImg.src = paths[currentIdx];
-                currentIdx++;
-            } else {
-                logoStatus.innerText = "NOT FOUND";
-                logoStatus.className = "text-[10px] font-extrabold text-red-500 uppercase";
-            }
-        }
-        rawWImg.onerror = tryNext;
-        tryNext();
+        function tryNext() { if (currentIdx < paths.length) { rawWImg.src = paths[currentIdx]; currentIdx++; } }
+        rawWImg.onerror = tryNext; tryNext();
     }
-
-    // Load logo immediately
     initLogo();
 
-    // UI Sliders
     opInput.oninput = () => { document.getElementById('opVal').innerText = opInput.value + "%"; render(); };
     scInput.oninput = () => { document.getElementById('scVal').innerText = scInput.value + "%"; render(); };
 
-    // File Upload
     document.getElementById('fileIn').onchange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
         const reader = new FileReader();
-        reader.onload = (f) => { 
-            sImg.onload = () => render(); 
-            sImg.src = f.target.result; 
-        };
-        reader.readAsDataURL(file);
+        reader.onload = (f) => { sImg.onload = () => render(); sImg.src = f.target.result; };
+        reader.readAsDataURL(e.target.files[0]);
     };
 
-    // --- MOUSE TRACKING ---
-    pc.addEventListener('mousemove', (e) => {
+    // --- CLICK TO PICKUP / DROP LOGIC ---
+    pc.addEventListener('mousedown', (e) => {
         if (!sImg.src) return;
+        isFollowing = !isFollowing; // Toggle follow state
+        
+        if(isFollowing) {
+            moveHint.innerText = "Logo Picked Up - Click to Drop";
+            moveHint.className = "text-[10px] font-bold text-emerald-600 uppercase bg-emerald-50 px-2 py-1 rounded";
+        } else {
+            moveHint.innerText = "Logo Dropped - Click to Pick Up";
+            moveHint.className = "text-[10px] font-bold text-amber-600 uppercase bg-amber-50 px-2 py-1 rounded";
+        }
+    });
+
+    pc.addEventListener('mousemove', (e) => {
+        if (!sImg.src || !isFollowing) return;
         const rect = pc.getBoundingClientRect();
-        // Update percentages based on cursor position
         logoX = ((e.clientX - rect.left) / rect.width) * 100;
         logoY = ((e.clientY - rect.top) / rect.height) * 100;
         render();
     });
 
-    // Draw everything to the screen
     function render() {
         if (!sImg.src) return;
-        const w = 1920, h = 1080; // Standardize internal canvas resolution
+        const w = 1920, h = 1080;
         pc.width = w; pc.height = h;
         px.clearRect(0, 0, w, h);
-        
-        // 1. Draw Photo
         px.drawImage(sImg, 0, 0, w, h);
         
-        // 2. Draw Transparent Watermark over photo
         if(cleanWImg.complete && cleanWImg.naturalWidth !== 0) {
             const sz = w * (scInput.value / 100);
             px.save();
             px.globalAlpha = opInput.value / 100;
-            // Draw exactly where the mouse is
             px.drawImage(cleanWImg, (logoX / 100) * w - (sz/2), (logoY / 100) * h - (sz/2), sz, sz);
             px.restore();
         }
     }
 
-    // --- EXPORT FUNCTION ---
-    async function exportFull(event) {
-        if (!sImg.src) return alert("Please upload an image first!");
-
+    function exportFull(event) {
+        if (!sImg.src) return;
         const btn = event.currentTarget;
-        const originalText = btn.innerHTML;
         btn.innerHTML = "⏳ SAVING...";
-        btn.disabled = true;
-
-        try {
-            // To ensure you get the exact image you see, we download it directly from the browser canvas
-            const finalImageURL = pc.toDataURL("image/png");
-            const a = document.createElement('a');
-            a.href = finalImageURL;
-            a.download = `InvoStudio_${Date.now()}.png`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        } catch (err) {
-            alert("Download failed.");
-        } finally {
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-        }
+        const finalImageURL = pc.toDataURL("image/png");
+        const a = document.createElement('a');
+        a.href = finalImageURL;
+        a.download = `InvoStudio_${Date.now()}.png`;
+        a.click();
+        btn.innerHTML = "📥 DOWNLOAD IMAGE";
     }
 </script>
 </body>

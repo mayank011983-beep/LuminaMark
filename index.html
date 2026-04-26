@@ -1,76 +1,50 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invo Studio | Premium Asset Protection</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background: #f4f7fa; height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; color: #1a202c; overflow: hidden; }
-        .app-window { background: white; width: 98%; height: 94%; max-width: 1700px; border-radius: 20px; display: flex; flex-direction: column; box-shadow: 0 35px 60px -15px rgba(0, 0, 0, 0.2); border: 1px solid #e2e8f0; overflow: hidden; }
-        .window-header { padding: 1.25rem 2.5rem; border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center; background: #ffffff; }
-        .section-card { background: #ffffff; border: 1px solid #edf2f7; border-radius: 16px; padding: 2rem; height: 100%; display: flex; flex-direction: column; }
-        .canvas-container { background: #f8fafc; border-radius: 12px; border: 2px dashed #cbd5e1; aspect-ratio: 16 / 9; position: relative; cursor: move; overflow: hidden; width: 100%; transition: border-color 0.3s; }
-        .canvas-container:hover { border-color: #1a202c; }
-        canvas { width: 100%; height: 100%; object-fit: contain; }
-        .btn-premium { background: #1a202c; color: white; transition: all 0.2s ease; border-radius: 12px; }
-        .btn-premium:hover { background: #000000; transform: translateY(-2px); shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
-        input[type="range"] { accent-color: #1a202c; cursor: pointer; }
-        
-        /* Subtle animation for the status dot */
-        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
-        .status-dot { animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
-    </style>
-</head>
-<body>
+<script>
+    const viewer = document.getElementById('canvasWrapper');
+    const watermarkPre = document.getElementById('logoPre');
+    let baseImage = new Image();
+    let watermarkImage = new Image();
 
-<div class="app-window">
-    <div class="window-header">
-        <div class="flex items-center gap-5">
-            <div class="bg-slate-900 p-3 rounded-xl text-white shadow-inner">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                    <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
-                </svg>
-            </div>
-            <div>
-                <h1 class="text-2xl font-black tracking-[0.2em] uppercase text-slate-900">Invo Studio</h1>
-                <p class="text-[11px] font-bold text-slate-400 tracking-widest uppercase mt-0.5">Asset Protection Suite</p>
-            </div>
-        </div>
-        <div class="flex items-center gap-8">
-            <div class="flex items-center gap-3 px-4 py-2 bg-slate-50 rounded-full border border-slate-100">
-                <div class="w-2.5 h-2.5 rounded-full bg-emerald-500 status-dot"></div>
-                <span class="text-[11px] font-extrabold text-slate-600 uppercase tracking-widest">Secure L2 Protocol Active</span>
-            </div>
-            <div class="flex gap-4 text-slate-300 font-bold text-xl"><span>—</span><span>▢</span><span>✕</span></div>
-        </div>
-    </div>
+    // Set Up Image Sources
+    watermarkImage.src = "Assets/watermark.png"; // MAKE SURE THIS FILE IS NOW TRANSPARENT
 
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 p-8 flex-1 overflow-hidden">
-        
-        <div class="flex flex-col gap-5">
-            <h3 class="text-[12px] font-black uppercase text-slate-400 tracking-wider">01. Import Asset</h3>
-            <div class="section-card">
-                <button onclick="document.getElementById('fileIn').click()" class="w-full py-4 px-6 border-2 border-slate-200 rounded-xl flex items-center justify-center gap-4 text-sm font-extrabold hover:bg-slate-50 transition-all mb-6 group">
-                    <span class="group-hover:scale-110 transition-transform">🖼️</span> Choose Base Image
-                </button>
-                <input type="file" id="fileIn" class="hidden" accept="image/*">
-                
-                <div class="canvas-container" id="canvasWrapper">
-                    <canvas id="pCanvas"></canvas>
-                </div>
-                <div class="mt-6 p-4 bg-slate-50 rounded-lg border border-slate-100 text-center">
-                    <p class="text-[11px] text-slate-500 leading-relaxed font-medium">Supported formats: High-Res PNG, JPG, WEBP.<br>Files are processed locally on your device for absolute privacy.</p>
-                </div>
-            </div>
-        </div>
+    // 1. Initial Load of Watermark
+    watermarkImage.onload = () => {
+        watermarkPre.src = watermarkImage.src;
+        watermarkPre.style.width = "100px"; // Set default width
+        watermarkPre.style.height = "auto";
+        watermarkPre.style.position = "absolute"; // Allows movement
+        watermarkPre.style.pointerEvents = "none"; // Ignores mouse so viewer gets the event
+    };
 
-        <div class="flex flex-col gap-5">
-            <h3 class="text-[12px] font-black uppercase text-slate-400 tracking-wider">02. Configure Mark</h3>
-            <div class="section-card">
-                <div class="bg-slate-50 border border-slate-100 rounded-2xl p-8 mb-8 flex items-center justify-center relative flex-1 min-h-[200px] shadow-inner">
-                    <img id="logoPre" src="./assets/watermark.png" class="max-w-[150px] max-h-full object-contain transition-opacity duration-700 opacity-0">
-                    <canvas id="tCanvas" class="hidden"></canvas> <div id="loaderText" class="absolute text-[11px] font-bold text-slate-400 animate-pulse uppercase tracking-widest">Loading Logo Protocol...Once you deploy this code to **Vercel** with the project name `invo-studio`, the application will appear exactly as you want it.
+    // 2. Handle Base Image Upload (Restored functionality)
+    document.getElementById('fileIn').onchange = (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (f) => {
+            baseImage.onload = () => {
+                // Clear the loader/text and show the canvas
+                const pc = document.getElementById('pCanvas');
+                const px = pc.getContext('2d');
+                pc.width = baseImage.width;
+                pc.height = baseImage.height;
+                px.drawImage(baseImage, 0, 0);
+                document.getElementById('canvasWrapper').style.aspectRatio = baseImage.width / baseImage.height;
+            };
+            baseImage.src = f.target.result;
+        };
+        reader.readAsDataURL(file);
+    };
 
-Your presence on Vercel is now fully established with the **"Invo Studio"** branding! If you have trouble logging into Vercel because your Netlify is down, make sure you are using your GitHub account to sign in to Vercel, and it will link everything automatically.
+    // 3. New Functionality: Move with Mouse Cursor
+    viewer.addEventListener('mousemove', (e) => {
+        // Find the mouse position relative to the viewing container
+        const rect = viewer.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        // Position the watermark so it is centered on the cursor
+        watermarkPre.style.left = (x - watermarkPre.offsetWidth / 2) + 'px';
+        watermarkPre.style.top = (y - watermarkPre.offsetHeight / 2) + 'px';
+    });
+</script>

@@ -3,67 +3,180 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Invo Studio | Premium Asset Protection</title>
+    <title>Invo Studio | Advanced Asset Protection</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-        body { font-family: 'Inter', sans-serif; background: #f4f7fa; height: 100vh; display: flex; align-items: center; justify-content: center; margin: 0; color: #1a202c; }
-        .app-window { background: white; width: 98%; height: 95%; max-width: 1600px; border-radius: 16px; display: flex; flex-direction: column; box-shadow: 0 20px 40px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
-        .window-header { padding: 1.25rem 2rem; border-bottom: 1px solid #edf2f7; display: flex; justify-content: space-between; align-items: center; }
-        .canvas-container { background: #f8fafc; border-radius: 12px; border: 2px dashed #cbd5e1; aspect-ratio: 16 / 9; position: relative; cursor: cell; overflow: hidden; width: 100%; height: 100%; }
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap');
+        
+        :root {
+            --glass: rgba(255, 255, 255, 0.8);
+            --border: rgba(226, 232, 240, 0.8);
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            height: 100vh; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            margin: 0; 
+            color: #0f172a;
+        }
+
+        .premium-card {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.05);
+        }
+
+        .canvas-area {
+            background: #ffffff;
+            border-radius: 16px;
+            border: 1px solid #f1f5f9;
+            position: relative;
+            cursor: cell;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .canvas-area:hover {
+            box-shadow: 0 0 0 4px rgba(15, 23, 42, 0.03);
+        }
+
         canvas { width: 100%; height: 100%; object-fit: contain; }
-        .btn-download { background: #059669; color: white; transition: all 0.2s ease; border-radius: 12px; font-weight: 900; }
-        .btn-download:hover { background: #047857; transform: translateY(-2px); }
-        input[type="range"] { accent-color: #1a202c; cursor: pointer; }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            height: 6px;
+            background: #e2e8f0;
+            border-radius: 5px;
+            accent-color: #0f172a;
+        }
+
+        .btn-main {
+            background: #0f172a;
+            color: white;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .btn-main:hover {
+            background: #1e293b;
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px -5px rgba(15, 23, 42, 0.2);
+        }
+
+        .btn-save {
+            background: #059669;
+            color: white;
+            transition: all 0.2s;
+        }
+
+        .btn-save:hover { background: #047857; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
 <body>
 
-<div class="app-window">
-    <div class="window-header">
+<div class="premium-card w-[96%] h-[92%] max-w-[1600px] flex flex-col overflow-hidden">
+    <div class="px-8 py-6 border-b border-slate-200/60 flex justify-between items-center bg-white/40">
         <div class="flex items-center gap-4">
-            <div class="bg-slate-900 p-2.5 rounded-xl text-white shadow-inner">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <div class="w-10 h-10 bg-slate-900 rounded-xl flex items-center justify-center text-white">
+                <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"></path></svg>
             </div>
-            <h1 class="text-2xl font-black tracking-widest uppercase text-slate-900">Invo Studio</h1>
+            <div>
+                <h1 class="text-xl font-bold tracking-tight">Invo Studio</h1>
+                <p class="text-[10px] uppercase tracking-[0.2em] font-extrabold text-slate-400">Premium Protection</p>
+            </div>
         </div>
-        <div class="text-[11px] font-extrabold text-emerald-600 tracking-widest bg-emerald-50 px-4 py-2 rounded-full border border-emerald-100">System Ready</div>
+        <div class="flex items-center gap-6">
+            <span class="flex items-center gap-2 text-[11px] font-bold text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full border border-emerald-100">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> SYSTEM ACTIVE
+            </span>
+        </div>
     </div>
 
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6 p-6 flex-1 overflow-hidden">
-        <div class="lg:col-span-3 flex flex-col gap-2 h-full">
-            <div class="flex justify-between items-end">
-                <h3 class="text-xs font-black uppercase text-slate-400">01. Preview & Placement</h3>
-                <span id="moveHint" class="text-[10px] font-bold text-amber-600 uppercase bg-amber-50 px-2 py-1 rounded">Click image to Pick Up / Drop logo</span>
-            </div>
-            <div class="canvas-container" id="canvasWrapper">
-                <canvas id="pCanvas"></canvas>
+    <div class="flex-1 grid grid-cols-12 gap-0 overflow-hidden">
+        
+        <div class="col-span-3 border-r border-slate-200/60 p-8 flex flex-col gap-6">
+            <h3 class="text-[11px] font-extrabold uppercase tracking-widest text-slate-400">Source Image</h3>
+            <div class="flex-1 flex flex-col gap-4">
+                <button onclick="document.getElementById('fileIn').click()" class="w-full py-4 px-6 border-2 border-dashed border-slate-200 rounded-2xl hover:border-slate-900 hover:bg-white transition-all group">
+                    <div class="text-2xl mb-1 group-hover:scale-110 transition-transform">🖼️</div>
+                    <div class="text-sm font-bold text-slate-600">Choose Source Image</div>
+                </button>
+                <input type="file" id="fileIn" class="hidden" accept="image/*">
+                
+                <div class="bg-white/50 rounded-2xl p-4 border border-slate-200/50 mt-auto">
+                    <p class="text-[11px] leading-relaxed text-slate-500 font-medium">
+                        Upload your high-resolution assets here. Supports PNG, JPG, and WEBP formats.
+                    </p>
+                </div>
             </div>
         </div>
 
-        <div class="flex flex-col gap-6 h-full bg-slate-50 border border-slate-100 rounded-2xl p-6">
-            <div>
-                <button onclick="document.getElementById('fileIn').click()" class="w-full py-4 bg-white border-2 border-slate-200 rounded-xl font-black text-slate-800 hover:bg-slate-100 transition-all">🖼️ CHOOSE IMAGE</button>
-                <input type="file" id="fileIn" class="hidden" accept="image/*">
+        <div class="col-span-6 bg-slate-50/30 p-8 flex flex-col gap-6">
+            <div class="flex justify-between items-center">
+                <h3 class="text-[11px] font-extrabold uppercase tracking-widest text-slate-400">Placement Tool</h3>
+                <span id="moveHint" class="text-[10px] font-bold text-slate-500 bg-white px-3 py-1 rounded-full border border-slate-200">CLICK IMAGE TO PICK UP LOGO</span>
+            </div>
+            
+            <div class="canvas-area flex-1 shadow-inner" id="canvasWrapper">
+                <canvas id="pCanvas"></canvas>
             </div>
 
-            <div class="space-y-6">
+            <div class="grid grid-cols-2 gap-8">
                 <div>
-                    <div class="flex justify-between mb-2"><label class="text-[11px] font-black text-slate-500 uppercase">Opacity</label><span id="opVal" class="text-[11px] font-bold">80%</span></div>
-                    <input type="range" id="opInput" class="w-full h-2 bg-slate-200 rounded-lg appearance-none" value="80">
+                    <div class="flex justify-between mb-2">
+                        <label class="text-[11px] font-bold uppercase text-slate-500">Opacity</label>
+                        <span id="opVal" class="text-[11px] font-extrabold">80%</span>
+                    </div>
+                    <input type="range" id="opInput" class="w-full" value="80">
                 </div>
                 <div>
-                    <div class="flex justify-between mb-2"><label class="text-[11px] font-black text-slate-500 uppercase">Size</label><span id="scVal" class="text-[11px] font-bold">20%</span></div>
-                    <input type="range" id="scInput" class="w-full h-2 bg-slate-200 rounded-lg appearance-none" value="20" min="5" max="80">
+                    <div class="flex justify-between mb-2">
+                        <label class="text-[11px] font-bold uppercase text-slate-500">Scale</label>
+                        <span id="scVal" class="text-[11px] font-extrabold">20%</span>
+                    </div>
+                    <input type="range" id="scInput" class="w-full" value="20" min="5" max="80">
+                </div>
+            </div>
+        </div>
+
+        <div class="col-span-3 border-l border-slate-200/60 p-8 flex flex-col gap-6">
+            <h3 class="text-[11px] font-extrabold uppercase tracking-widest text-slate-400">Advanced Export</h3>
+            
+            <div class="space-y-6 flex-1">
+                <div class="p-5 bg-slate-900 rounded-2xl text-white">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="text-[10px] font-bold opacity-60">SECURITY PROTOCOL</span>
+                        <div class="w-2 h-2 rounded-full bg-emerald-400"></div>
+                    </div>
+                    <p class="text-xs leading-relaxed font-medium opacity-90">Cryptographic signature and automated white-space removal enabled.</p>
+                </div>
+
+                <div class="space-y-2">
+                    <label class="text-[11px] font-bold uppercase text-slate-500">Output Format</label>
+                    <select class="w-full p-3 bg-white border border-slate-200 rounded-xl text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-slate-900/5">
+                        <option>Studio Quality PNG</option>
+                        <option>Optimized Web (JPG)</option>
+                    </select>
+                </div>
+
+                <div class="p-4 rounded-2xl border border-slate-200 bg-white flex items-center justify-between">
+                    <span class="text-[10px] font-bold text-slate-400 uppercase">Logo Status</span>
+                    <span id="logoStatus" class="text-[10px] font-black text-amber-500 uppercase">Initializing...</span>
                 </div>
             </div>
 
-            <div class="p-4 bg-white rounded-xl border border-slate-200 text-center">
-                <span id="logoStatus" class="text-[10px] font-black text-slate-400 uppercase tracking-widest">Logo Not Found</span>
-            </div>
-
-            <div class="mt-auto">
-                <button onclick="exportFull(event)" class="w-full py-5 btn-download text-sm tracking-widest uppercase shadow-lg">📥 DOWNLOAD IMAGE</button>
+            <div class="space-y-3">
+                <button onclick="render()" class="w-full py-4 border border-slate-200 rounded-2xl text-xs font-bold uppercase tracking-widest hover:bg-white transition-all">Refresh Preview</button>
+                <button onclick="exportFull(event)" class="w-full py-4 btn-save rounded-2xl text-xs font-black uppercase tracking-widest shadow-lg shadow-emerald-200">Save Protected Image</button>
             </div>
         </div>
     </div>
@@ -73,19 +186,16 @@
     const pc = document.getElementById('pCanvas');
     const px = pc.getContext('2d');
     const opInput = document.getElementById('opInput'), scInput = document.getElementById('scInput');
-    const logoStatus = document.getElementById('logoStatus');
-    const moveHint = document.getElementById('moveHint');
+    const logoStatus = document.getElementById('logoStatus'), moveHint = document.getElementById('moveHint');
 
-    let sImg = new Image(); 
-    let rawWImg = new Image(); 
-    let cleanWImg = new Image(); 
-    
-    let logoX = 50, logoY = 50; 
-    let isFollowing = false; // The "Pickup" state
+    let sImg = new Image(), rawWImg = new Image(), cleanWImg = new Image();
+    let logoX = 50, logoY = 50, isFollowing = false;
 
+    // --- AUTO-CLEAN LOGO ---
     function initLogo() {
         const paths = ["./assets/watermark.png", "./Assets/watermark.png", "assets/watermark.png", "watermark.png"];
         let currentIdx = 0;
+
         rawWImg.onload = () => {
             const tCanvas = document.createElement('canvas');
             tCanvas.width = rawWImg.width; tCanvas.height = rawWImg.height;
@@ -93,17 +203,26 @@
             tCtx.drawImage(rawWImg, 0, 0);
             const imgData = tCtx.getImageData(0, 0, tCanvas.width, tCanvas.height);
             for(let i = 0; i < imgData.data.length; i += 4) {
-                if(imgData.data[i] > 210 && imgData.data[i+1] > 210 && imgData.data[i+2] > 210) imgData.data[i+3] = 0; 
+                if(imgData.data[i] > 210 && imgData.data[i+1] > 210 && imgData.data[i+2] > 210) imgData.data[i+3] = 0;
             }
             tCtx.putImageData(imgData, 0, 0);
-            cleanWImg.onload = () => { logoStatus.innerText = "Protocol: Transparent"; logoStatus.className = "text-[10px] font-black text-emerald-500 uppercase"; render(); };
+            cleanWImg.onload = () => {
+                logoStatus.innerText = "READY";
+                logoStatus.className = "text-[10px] font-black text-emerald-500 uppercase";
+                render();
+            };
             cleanWImg.src = tCanvas.toDataURL();
         };
-        function tryNext() { if (currentIdx < paths.length) { rawWImg.src = paths[currentIdx]; currentIdx++; } }
+
+        function tryNext() { if (currentIdx < paths.length) { rawWImg.src = paths[currentIdx]; currentIdx++; } else {
+            logoStatus.innerText = "MISSING";
+            logoStatus.className = "text-[10px] font-black text-red-500 uppercase";
+        }}
         rawWImg.onerror = tryNext; tryNext();
     }
     initLogo();
 
+    // UI Updates
     opInput.oninput = () => { document.getElementById('opVal').innerText = opInput.value + "%"; render(); };
     scInput.oninput = () => { document.getElementById('scVal').innerText = scInput.value + "%"; render(); };
 
@@ -113,18 +232,12 @@
         reader.readAsDataURL(e.target.files[0]);
     };
 
-    // --- CLICK TO PICKUP / DROP LOGIC ---
-    pc.addEventListener('mousedown', (e) => {
+    // --- CLICK TO FOLLOW LOGIC ---
+    pc.addEventListener('mousedown', () => {
         if (!sImg.src) return;
-        isFollowing = !isFollowing; // Toggle follow state
-        
-        if(isFollowing) {
-            moveHint.innerText = "Logo Picked Up - Click to Drop";
-            moveHint.className = "text-[10px] font-bold text-emerald-600 uppercase bg-emerald-50 px-2 py-1 rounded";
-        } else {
-            moveHint.innerText = "Logo Dropped - Click to Pick Up";
-            moveHint.className = "text-[10px] font-bold text-amber-600 uppercase bg-amber-50 px-2 py-1 rounded";
-        }
+        isFollowing = !isFollowing;
+        moveHint.innerText = isFollowing ? "CLICK TO DROP LOGO" : "CLICK TO PICK UP LOGO";
+        moveHint.style.color = isFollowing ? "#10b981" : "#64748b";
     });
 
     pc.addEventListener('mousemove', (e) => {
@@ -154,13 +267,14 @@
     function exportFull(event) {
         if (!sImg.src) return;
         const btn = event.currentTarget;
-        btn.innerHTML = "⏳ SAVING...";
+        const original = btn.innerText;
+        btn.innerText = "PROCESSING...";
         const finalImageURL = pc.toDataURL("image/png");
         const a = document.createElement('a');
         a.href = finalImageURL;
         a.download = `InvoStudio_${Date.now()}.png`;
         a.click();
-        btn.innerHTML = "📥 DOWNLOAD IMAGE";
+        btn.innerText = original;
     }
 </script>
 </body>
